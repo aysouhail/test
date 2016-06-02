@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -14,17 +15,26 @@ namespace Demo.Controllers
             string message = "Can't join the DataBase server! Verify your check list!";
             try
             {
-                DBModelContainer ctx = new DBModelContainer();
-                var homeObj = ctx.HomeSet.FirstOrDefault();
-                if (homeObj != null)
+                System.Data.SqlClient.SqlConnection cnx = new System.Data.SqlClient.SqlConnection();
+                cnx.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DBModelContainer"].ConnectionString;
+                SqlCommand command = new SqlCommand("SELECT * FROM HomeSet;",cnx);
+                cnx.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
                 {
-                    title = homeObj.Title;
-                    message = homeObj.Message;
+                    while (reader.Read())
+                    {
+                        title = reader.GetString(1);
+                        message = reader.GetString(2);
+                        
+                    }
                 }
+                reader.Close();
             }
             catch 
             {
-            
             }
             ViewBag.Title = title;
             ViewBag.Message = message;
