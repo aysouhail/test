@@ -10,6 +10,24 @@ namespace Demo.Controllers
     {
         public ActionResult Index()
         {
+            string title = "What's a shame!";
+            string message = "Can't join the DataBase server! Verify your check list!";
+            try
+            {
+                DBModelContainer ctx = new DBModelContainer();
+                var homeObj = ctx.HomeSet.FirstOrDefault();
+                if (homeObj != null)
+                {
+                    title = homeObj.Title;
+                    message = homeObj.Message;
+                }
+            }
+            catch 
+            {
+            
+            }
+            ViewBag.Title = title;
+            ViewBag.Message = message;
             return View();
         }
 
