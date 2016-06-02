@@ -24,12 +24,10 @@ namespace Demo.Controllers
 
                 if (reader.HasRows)
                 {
-                    while (reader.Read())
-                    {
+                    reader.Read();
+
                         title = reader.GetString(1);
                         message = reader.GetString(2);
-                        
-                    }
                 }
                 reader.Close();
             }
